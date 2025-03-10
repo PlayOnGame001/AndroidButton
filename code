@@ -1,0 +1,82 @@
+MainActivity.kt
+--------------------------
+package com.example.buttonexpander
+
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
+import com.example.buttonexpander.databinding.ActivityMainBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private var buttonWidth = 300  // Начальная ширина кнопки в пикселях
+    private val increaseAmount = 10 // На сколько увеличивать кнопку
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        supportActionBar?.title = "Осталось времени:"
+
+        binding.button.layoutParams.width = buttonWidth
+
+        binding.button.setOnClickListener {
+            buttonWidth += increaseAmount
+            binding.button.layoutParams.width = buttonWidth
+            binding.button.requestLayout()
+
+            updateTimeLeft()
+        }
+    }
+
+    private fun updateTimeLeft() {
+        val nextLessonTime = Calendar.getInstance().apply {
+            set(2025, Calendar.MARCH, 15, 10, 0, 0) // Установи свою дату занятия
+        }.timeInMillis
+
+        val currentTime = System.currentTimeMillis()
+        val diff = nextLessonTime - currentTime
+
+        if (diff > 0) {
+            val days = TimeUnit.MILLISECONDS.toDays(diff)
+            val hours = TimeUnit.MILLISECONDS.toHours(diff) % 24
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60
+
+            val timeLeft = "$days д., $hours ч., $minutes мин., $seconds сек."
+            supportActionBar?.title = "Осталось: $timeLeft"
+
+            Handler(Looper.getMainLooper()).postDelayed({ updateTimeLeft() }, 1000)
+        } else {
+            supportActionBar?.title = "Занятие уже началось!"
+        }
+    }
+}
+
+-------------------------------
+res/layout/activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Нажми меня!" />
+
+</LinearLayout>
+--------------------------------------
+
+
