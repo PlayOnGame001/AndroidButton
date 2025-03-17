@@ -1,0 +1,119 @@
+mainActivity
+
+package com.example.klass_work_library
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ImageAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val images = listOf(
+            "https://picsum.photos/300/200",
+            "https://picsum.photos/400/300"
+        )
+
+        adapter = ImageAdapter(images)
+        recyclerView.adapter = adapter
+    }
+}
+---------------------------------------
+ImageAdapter
+
+package com.example.klass_work_library
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+
+class ImageAdapter(private val images: List<String>) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+
+    class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageView: ImageView = view.findViewById(R.id.imageView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        return ImageViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val imageUrl = images[position]
+        Picasso.get().load(imageUrl).into(holder.imageView)
+    }
+
+    override fun getItemCount(): Int = images.size
+}
+--------------------------------------------
+activity.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+---------------------------------------------------
+itemlayout.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"/>
+</androidx.cardview.widget.CardView>
+------------------------------------------------
+пару зависимостей 
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.material)
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+
+версия для библиотеки
+appcompat = "1.6.1"
+constraintlayout = "2.2.0"
+androidx-recyclerview = "1.2.1"
+squareup-picasso = "2.8"
+androidx-appcompat = "1.6.1"
+androidx-core-ktx = "1.9.0"
+androidx-material = "1.11.0"
+
+androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
+squareup-picasso = { module = "com.squareup.picasso:picasso", version.ref = "squareup-picasso" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
