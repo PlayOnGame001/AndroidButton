@@ -1,0 +1,95 @@
+MainActivity
+
+package com.example.klass_work_library
+
+import android.app.Dialog
+import android.os.Bundle
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val showDialogButton: Button = findViewById(R.id.showDialogButton)
+        showDialogButton.setOnClickListener {
+            showCustomDialog()
+        }
+    }
+
+    private fun showCustomDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_custom)
+
+        val image: ImageView = dialog.findViewById(R.id.dialogImage)
+        val btnAction1: Button = dialog.findViewById(R.id.btnAction1)
+        val btnAction2: Button = dialog.findViewById(R.id.btnAction2)
+        val btnAction3: Button = dialog.findViewById(R.id.btnAction3)
+        val btnClose: Button = dialog.findViewById(R.id.btnClose)
+
+        btnAction1.setOnClickListener { /* Действие 1 */ }
+        btnAction2.setOnClickListener { /* Действие 2 */ }
+        btnAction3.setOnClickListener { /* Действие 3 */ }
+        btnClose.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+    }
+}
+-----------------------------
+activitymain.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<Button
+    android:id="@+id/showDialogButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Открыть диалог" />
+</LinearLayout>
+--------------------------------
+
+dialog.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_bg">
+
+    <ImageView
+        android:id="@+id/dialogImage"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:src="@drawable/sample_image"
+        android:scaleType="centerCrop" />
+
+    <Button
+        android:id="@+id/btnAction1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Действие 1" />
+
+    <Button
+        android:id="@+id/btnAction2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Действие 2" />
+
+    <Button
+        android:id="@+id/btnAction3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Действие 3" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Закрыть" />
+</LinearLayout>
