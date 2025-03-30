@@ -1,0 +1,92 @@
+MainActivity
+
+package com.example.app2
+
+import android.R
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.sin
+
+class RoadSignView(context: Context?, attrs: AttributeSet?) :
+    View(context, attrs) {
+    private var paintSign: Paint? = null
+    private var paintText: Paint? = null
+    private var path: Path? = null
+
+    init {
+        init()
+    }
+
+    private fun init() {
+        paintSign = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintSign!!.color = Color.RED
+        paintSign!!.style = Paint.Style.FILL
+
+        paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintText!!.color = Color.WHITE
+        paintText!!.textSize = 100f
+        paintText!!.textAlign = Paint.Align.CENTER
+
+        path = Path()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        val centerX = width / 2
+        val centerY = height / 2
+        val size = (min(width.toDouble(), height.toDouble()) / 3).toInt()
+
+        drawOctagon(canvas, centerX, centerY, size)
+        canvas.drawText("STOP", centerX.toFloat(), (centerY + 30).toFloat(), paintText!!)
+    }
+
+    private fun drawOctagon(canvas: Canvas, cx: Int, cy: Int, size: Int) {
+        val angle = (Math.PI / 4).toFloat()
+        path!!.reset()
+
+        for (i in 0..7) {
+            val x = (cx + size * cos((angle * i).toDouble())).toFloat()
+            val y = (cy + size * sin((angle * i).toDouble())).toFloat()
+            if (i == 0) {
+                path!!.moveTo(x, y)
+            } else {
+                path!!.lineTo(x, y)
+            }
+        }
+        path!!.close()
+
+        canvas.drawPath(path!!, paintSign!!)
+    }
+}
+
+internal class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}
+
+---------------------
+ActivityMain
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.example.roadSign.RoadSignView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
