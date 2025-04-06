@@ -1,0 +1,57 @@
+ActivityMain
+
+package com.example.app2
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val barChart = findViewById<BarChart>(R.id.barChart)
+
+        val entries = ArrayList<BarEntry>()
+        entries.add(BarEntry(0f, 5000f)) // Доходи Січень
+        entries.add(BarEntry(1f, 3000f)) // Витрати Січень
+        entries.add(BarEntry(2f, 6000f)) // Доходи Лютий
+        entries.add(BarEntry(3f, 2500f)) // Витрати Лютий
+        entries.add(BarEntry(4f, 7000f)) // Доходи Березень
+        entries.add(BarEntry(5f, 4000f)) // Витрати Березень
+
+        val dataSet = BarDataSet(entries, "Доходи та Витрати")
+        val data = BarData(dataSet)
+
+        barChart.data = data
+
+        val description = Description()
+        description.text = "Статистика"
+        barChart.description = description
+
+        barChart.animateY(1000)
+        barChart.invalidate()
+    }
+}
+
+-----------------------
+main_activity 
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>
